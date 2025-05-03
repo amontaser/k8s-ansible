@@ -1,0 +1,25 @@
+---
+# Kubernetes Worker Settings
+kubelet_extra_args: >
+  --node-ip={{ ansible_default_ipv4.address }}
+  --read-only-port=0
+  --protect-kernel-defaults=true
+  --container-runtime-endpoint=unix:///var/run/crio/crio.sock
+
+# Kubeadm specific
+kubeadm_role: "worker"
+
+# Required ports
+kubernetes_ports:
+  - { port: 10250, proto: tcp, description: "Kubelet API" }
+  - { port: 30000-32767, proto: tcp, description: "NodePort Services" }
+
+# Resource reservations (adjust based on your VM specs)
+kubelet_reserved:
+  cpu: "500m"
+  memory: "500Mi"
+  ephemeral-storage: "1Gi"
+
+# Container runtime settings
+container_runtime: "crio"
+crio_storage_driver: "overlay"

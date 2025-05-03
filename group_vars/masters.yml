@@ -1,0 +1,38 @@
+---
+# Kubernetes Control Plane Settings
+kubelet_extra_args: >
+  --node-ip={{ ansible_default_ipv4.address }}
+  --read-only-port=0
+  --protect-kernel-defaults=true
+
+# Kubeadm specific
+kubeadm_role: "control-plane"
+kubeadm_cert_key: ""  # Will be generated during init
+
+# API Server Extra Args
+api_server_extra_args:
+  advertise-address: "{{ ansible_default_ipv4.address }}"
+  bind-address: "0.0.0.0"
+  tls-cipher-suites: "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+
+# Controller Manager Extra Args
+controller_manager_extra_args:
+  bind-address: "0.0.0.0"
+  node-monitor-grace-period: "20s"
+
+# Scheduler Extra Args
+scheduler_extra_args:
+  bind-address: "0.0.0.0"
+
+# ETCD Settings
+etcd_extra_args:
+  heartbeat-interval: "500"
+  election-timeout: "2500"
+
+# Required ports
+kubernetes_ports:
+  - { port: 6443, proto: tcp, description: "Kubernetes API" }
+  - { port: 2379-2380, proto: tcp, description: "ETCD" }
+  - { port: 10250, proto: tcp, description: "Kubelet API" }
+  - { port: 10259, proto: tcp, description: "kube-scheduler" }
+  - { port: 10257, proto: tcp, description: "kube-controller-manager" }
