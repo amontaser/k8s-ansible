@@ -1,0 +1,18 @@
+- name: Initialize first master
+  command: |
+    kubeadm init --control-plane-endpoint "10.0.30.70:6443" \
+      --pod-network-cidr=10.244.0.0/16
+  when: inventory_hostname == "k8s-master1"
+
+- name: Join other masters
+  command: |
+    kubeadm join 10.0.30.70:6443 --token {{ token }} \
+      --discovery-token-ca-cert-hash sha256:{{ hash }} \
+      --control-plane
+  when: inventory_hostname in groups['masters'] and inventory_hostname != "k8s-master1"
+
+- name: Join workers
+  command: |
+    kubeadm join 10.0.30.70:6443 --token {{ token }} \
+      --discovery-token-ca-cert-hash sha256:{{ hash }}
+  when: inventory_hostname in groups['workers']

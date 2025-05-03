@@ -1,0 +1,4 @@
+---
+- name: Apply Flannel CNI
+  command: kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+  when: inventory_hostname == groups['masters'][0]  # Run only on first master

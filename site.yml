@@ -1,0 +1,22 @@
+---
+- hosts: all
+  roles:
+    - common
+
+- hosts: load_balancer
+  roles:
+    - haproxy
+
+- hosts: masters
+  roles:
+    - cri-o
+    - kubeadm
+
+- hosts: workers
+  roles:
+    - cri-o
+    - kubeadm
+
+- hosts: masters[0]  # First master only
+  roles:
+    - cni

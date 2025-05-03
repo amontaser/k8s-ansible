@@ -1,0 +1,11 @@
+---
+# Kubernetes version
+k8s_version: "1.32"
+crio_version: "1.32"
+
+# Network CIDRs
+service_cidr: "10.96.0.0/12"
+pod_cidr: "10.244.0.0/16"
+
+# System
+ansible_python_interpreter: /usr/bin/python3
